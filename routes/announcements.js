@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Announcement = require("../models/Announcement");
+const sendPushNotificationToStudents = require("../utils/sendPushNotification");
 
 // Create announcement
 router.post("/", async (req, res) => {
@@ -45,6 +46,19 @@ router.post("/", async (req, res) => {
 
     await newAnnouncement.save();
 
+   await sendPushNotificationToStudents({
+  title: title.trim(),
+  body: content.trim(),
+  doctorName: doctorName?.trim() || "",
+  category: newAnnouncement.category || "general",
+  priority: newAnnouncement.priority || "normal",
+  data: {
+    announcementId: newAnnouncement._id.toString(),
+    category: newAnnouncement.category || "general",
+    priority: newAnnouncement.priority || "normal",
+    type: "announcement",
+  },
+});
     res.status(201).json({
       message: "Announcement created successfully",
       announcement: newAnnouncement,

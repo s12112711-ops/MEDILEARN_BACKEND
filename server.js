@@ -12,8 +12,8 @@ const messageRoutes = require("./routes/messages");
 const notificationRoutes = require("./routes/notificationRoutes");
 const app = express();
 const aiReportRoutes = require("./routes/aiReportRoutes");
-
-
+const doctorEvaluationRoutes = require("./routes/doctorEvaluationRoutes");
+const doctorProfileRoutes = require("./routes/doctorProfiles");
 
 app.use(cors());
 app.use(express.json());
@@ -30,7 +30,9 @@ app.use("/api/ai", require("./routes/ai"));
 app.use("/api/ai", aiReportRoutes);
 
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/doctor-evaluations", doctorEvaluationRoutes);
 
+app.use("/api/doctor-profiles", doctorProfileRoutes);
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {
